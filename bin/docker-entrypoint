@@ -1,8 +1,12 @@
 #!/bin/bash -e
+set -e
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   ./bin/rails db:prepare
 fi
+
+# Set ownership of the /rails directory to the 'rails' user
+chown -R rails:rails /rails
 
 exec "${@}"
