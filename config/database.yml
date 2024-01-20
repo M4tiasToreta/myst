@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: db
+  username: postgres
+  password: postgres
+  port: 5433
+  pool: 5
+
+development:
+  <<: *default
+  database: myst_development
+
+
+test:
+  <<: *default
+  database: myst_test
