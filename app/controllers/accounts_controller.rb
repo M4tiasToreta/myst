@@ -1,14 +1,18 @@
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ balance ]
 
-  # GET /accounts
   def balance
-    render plain: @account.balance
+    if @account.present?
+      render plain: @account.balance.to_s
+    else
+      render plain: 0.to_s, status: :not_found
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_account
-      @account = Account.find(params[:account_id])
-    end
+  def set_account
+    @account = Account.find(params[:account_id])
+  rescue ActiveRecord::RecordNotFound
+    @account = nil
+  end
 end
