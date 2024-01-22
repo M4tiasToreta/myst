@@ -1,5 +1,8 @@
 class TransactionsHandlerService
 
+  include Transactions::TransactionAccountHelper
+  include Transactions::TransactionResponseHelper
+
   attr_accessor :type, :origin_id, :destination_id, :amount
 
   def initialize(type, origin_id=[], destination_id=[], amount)
@@ -37,31 +40,5 @@ class TransactionsHandlerService
   def handle_deposit
     PriceableService.deposit_balance(amount, destination_account)
     destination_response
-  end
-
-  def destination_account
-    return @destination_account if @destination_account
-    @destination_account = Account.find(destination_id)
-  rescue ActiveRecord::RecordNotFound
-    AccountHandlerService.new_receiving_account(destination_id)
-  end
-
-  def origin_account
-    return @origin_account if @origin_account
-    @origin_account = Account.find(origin_id)
-  rescue ActiveRecord::RecordNotFound
-    nil
-  end
-
-  def destination_response
-    {:destination => {id: destination_id, balance: destination_account.balance}}
-  end
-
-  def origin_response
-    {:origin => {id: origin_id, balance: origin_account.balance}}
-  end
-
-  def transfer_response
-    origin_response.merge(destination: destination_response[:destination])
   end
 end
