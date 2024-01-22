@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   def reset
-    render status: :ok
+    render plain: 'OK', status: :ok
   end
 
   def event
